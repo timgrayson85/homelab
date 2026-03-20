@@ -271,11 +271,68 @@ You must keep your virtual memory in sync with the memory.md file:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### Guardrails & Safety
+
+When deploying AI agents in regulated environments, guardrails are critical. Even if the agent inherits your permissions, you need explicit constraints.
+
+**Example from my SQL Performance Analyst:**
+
+```markdown
+# Safety Constraints
+
+⚠️ CRITICAL: You must NEVER execute any query against a production database.
+- No SELECT statements on production
+- No EXPLAIN or SHOW PLAN on production
+- No read-only queries on production
+- Production is completely off-limits
+
+You may only analyse:
+- Execution plans provided to you as text
+- Query snippets shared for review
+- Non-production environments explicitly identified as safe
+```
+
+**Why this matters:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Agent Permission Model                        │
+│                                                                  │
+│   Without Guardrails:          With Guardrails:                 │
+│   ────────────────────         ─────────────────────            │
+│   Agent → "Run this query"     Agent → "I can't do that"        │
+│      ↓                               ↓                          │
+│   Database → Executes          Blocked by prompt constraint     │
+│      ↓                                                          │
+│   💥 Production incident                                          │
+│                                                                  │
+│   Guardrails act as a prompt-level firewall                     │
+│   before the agent can even attempt the action                   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Key principle:** The agent may have read-only permissions, but "read-only" on a critical production system still carries risk:
+- Performance impact from expensive queries
+- Accidental exposure of sensitive data
+- Compliance violations from uncontrolled access
+
+**Prompt engineering as security:**
+
+| Traditional Security | Prompt-Based Guardrails |
+|---------------------|------------------------|
+| Firewalls, RBAC | Instructions in agent.md |
+| Network-level blocks | Semantic understanding |
+| Binary allow/deny | Contextual reasoning |
+| Infrastructure control | Behavioural control |
+
+Both are needed — prompt guardrails add a semantic layer that understands *why* certain actions are prohibited.
+
 ### Gotchas
 
 - **Merge conflicts** — If two people use the agent simultaneously, memory.md may conflict
 - **Sync discipline** — Need to pull before starting, push after finishing
 - **Context limits** — memory.md can't be infinitely large; prune old knowledge
+- **Guardrails are not guarantees** — Prompt instructions can be ignored; use them alongside proper access controls
 
 ### Future Exploration
 

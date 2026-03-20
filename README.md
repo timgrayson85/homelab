@@ -141,6 +141,151 @@ tail -f ~/.openclaw/logs/*.log
 
 ---
 
+## 🤖 Custom AI Agents
+
+Experimenting with custom GitHub Copilot agents in VS Code — defining specialised AI assistants through prompt files and shared memory.
+
+### The Concept
+
+GitHub Copilot allows you to create custom agents by defining:
+- **Agent instructions** — `.github/instructions/*.md` files that define behaviour
+- **Prompt files** — `.github/prompts/*.md` for reusable prompt templates
+- **Memory files** — Persistent knowledge the agent can read/write
+
+### My Custom Agents
+
+| Agent | Purpose |
+|-------|---------|
+| **SQL Performance Analyst** | Analyses SQL Server execution plans, identifies performance bottlenecks |
+| **Splunk Query Helper** | Writes Splunk queries and dashboard widgets (because regex is painful) |
+
+### Shared Memory Architecture
+
+The key innovation is making agent memory **shareable across a team**:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         Local Machine                            │
+│                                                                  │
+│  ┌─────────────────┐         sync         ┌─────────────────┐   │
+│  │  Virtual Memory │  ←────────────────→  │   memory.md     │   │
+│  │  (Copilot's     │       bidirectional  │  (in repo)      │   │
+│  │   context)      │                      │                 │   │
+│  └─────────────────┘                      └────────┬────────┘   │
+│                                                    │            │
+└────────────────────────────────────────────────────┼────────────┘
+                                                     │
+                                                     │ Git push/pull
+                                                     │
+                              ┌──────────────────────┼──────────────────────┐
+                              │                      ▼                      │
+                              │            ┌─────────────────┐              │
+                              │            │  Remote Repo    │              │
+                              │            │  (GitHub)       │              │
+                              │            └────────┬────────┘              │
+                              │                     │                       │
+                              │       ┌─────────────┼─────────────┐         │
+                              │       ▼             ▼             ▼         │
+                              │  ┌─────────┐  ┌─────────┐  ┌─────────┐     │
+                              │  │ Team    │  │ Team    │  │ Team    │     │
+                              │  │ Mate 1  │  │ Mate 2  │  │ Mate N  │     │
+                              │  └─────────┘  └─────────┘  └─────────┘     │
+                              │       │             │             │         │
+                              │       ▼             ▼             ▼         │
+                              │  Same memory.md on each machine             │
+                              │                                              │
+                              └──────────────────────────────────────────────┘
+```
+
+### How It Works
+
+**1. Agent Instructions**
+
+Each agent has an `instructions.md` file that defines its behaviour:
+
+```
+.github/
+├── instructions/
+│   ├── sql-performance-analyst.md
+│   └── splunk-query-helper.md
+└── memory/
+    └── memory.md
+```
+
+**2. Memory Synchronisation**
+
+The agent is instructed to mirror its virtual memory with `memory.md`:
+
+```markdown
+# Memory Synchronisation
+
+You must keep your virtual memory in sync with the memory.md file:
+- Before responding, read memory.md to load previous context
+- After learning something new, update memory.md
+- Use the file as your persistent knowledge store
+```
+
+**3. Git as the Transport Layer**
+
+```
+┌────────────┐    pull     ┌────────────┐    push    ┌────────────┐
+│  Person A  │ ──────────→ │   Remote   │ ←───────── │  Person B  │
+│            │             │   Repo     │            │            │
+│ memory.md  │ ←────────── │ memory.md  │ ─────────→ │ memory.md  │
+└────────────┘    latest   └────────────┘   updated  └────────────┘
+```
+
+### Benefits
+
+| Aspect | Traditional Memory | Shared Memory |
+|--------|-------------------|---------------|
+| **Persistence** | Lost between sessions | Survives in Git |
+| **Team sharing** | Personal only | Everyone gets the same knowledge |
+| **Version control** | None | Full Git history |
+| **Audit trail** | None | Every change tracked |
+
+### Workflow Pattern
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                        Agent Session                            │
+│                                                                 │
+│  1. Pull latest ──────────────────────────────────────────┐    │
+│     git pull                                               │    │
+│                                                            │    │
+│  2. Load memory ──────────────────────────────────────┐    │    │
+│     Agent reads memory.md                              │    │    │
+│                                                        │    │    │
+│  3. Work ────────────────────────────────────────┐    │    │    │
+│     Agent assists using loaded context            │    │    │    │
+│                                                    │    │    │    │
+│  4. Learn ────────────────────────────────────┐  │    │    │    │
+│     Agent updates memory.md with new knowledge │  │    │    │    │
+│                                                │  │    │    │    │
+│  5. Commit ────────────────────────────────┐  │  │    │    │    │
+│     git add memory.md && git commit         │  │  │    │    │    │
+│                                             │  │  │    │    │    │
+│  6. Push ───────────────────────────────┐  │  │  │    │    │    │
+│     git push                            │  │  │  │    │    │    │
+│                                         ▼  ▼  ▼  ▼    ▼    ▼    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Gotchas
+
+- **Merge conflicts** — If two people use the agent simultaneously, memory.md may conflict
+- **Sync discipline** — Need to pull before starting, push after finishing
+- **Context limits** — memory.md can't be infinitely large; prune old knowledge
+
+### Future Exploration
+
+This is essentially a **manual RAG system** — a stepping stone toward:
+- Proper vector databases (ChromaDB, Pinecone)
+- Embedding-based retrieval
+- Automatic knowledge indexing
+
+---
+
 ## 🔮 Future Plans
 
 - [ ] Connect second WhatsApp number for dedicated AI assistant

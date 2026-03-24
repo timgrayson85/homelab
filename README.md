@@ -126,6 +126,12 @@ Edit the workspace files:
 ## 🔧 Useful Commands
 
 ```bash
+# Start ollama
+ollama serve
+
+# Run an LLM model
+ollama run glm-5
+
 # Check CPU temp
 vcgencmd measure_temp
 

@@ -352,11 +352,11 @@ This is essentially a **manual RAG system** — a stepping stone toward:
 ## 🔮 Future Plans
 
 - [ ] Connect second WhatsApp number for dedicated AI assistant
-- [ ] Set up GitHub Copilot integration
 - [ ] Add monitoring/alerting (Prometheus/Grafana?)
 - [ ] Containerise with Docker
 - [ ] Set up Tailscale for remote access
 - [ ] Experiment with local models on more powerful hardware
+- [x] ~~Set up GitHub Copilot integration~~ — Using custom agents with shared memory
 
 ---
 

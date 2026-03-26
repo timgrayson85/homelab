@@ -1,28 +1,28 @@
-# 🏠 Homelab
+# Homelab
 
 My home lab setup for learning, experimenting, and future-proofing my engineering skills.
 
 ---
 
-## 📋 Overview
+## Overview
 
 This repo documents my self-hosted AI assistant setup running on a Raspberry Pi. The goal: hands-on experience with AI/ML, DevOps practices, and infrastructure management.
 
 ---
 
-## 🖥️ Hardware
+## Hardware
 
 | Component | Specs |
 |-----------|-------|
-| **Device** | Raspberry Pi 4 Model B Rev 1.1 |
-| **RAM** | 4GB |
-| **Storage** | 32GB SD Card + 1TB External SSD |
-| **OS** | Raspberry Pi OS (Linux 6.12.62+rpt-rpi-v8, arm64) |
-| **Node.js** | v25.6.1 |
+| Device | Raspberry Pi 4 Model B Rev 1.1 |
+| RAM | 4GB |
+| Storage | 32GB SD Card + 1TB External SSD |
+| OS | Raspberry Pi OS (Linux 6.12.62+rpt-rpi-v8, arm64) |
+| Node.js | v25.6.1 |
 
 ---
 
-## 🧠 AI Stack
+## AI Stack
 
 ### OpenClaw
 
@@ -31,7 +31,7 @@ Self-hosted AI assistant running locally on the Pi.
 - **Model:** glm-5:cloud (via Ollama cloud)
 - **Channel:** WhatsApp integration
 - **Workspace:** External SSD (`/mnt/openclaw`)
-- **Config:** Custom assistant named "Anton" 🐧
+- **Config:** Custom assistant named "Anton"
 
 ### Ollama
 
@@ -44,11 +44,11 @@ Model management for local and cloud LLMs.
 | qwen2.5:1.5b-instruct | 986 MB | Local |
 | tinyllama:1.1b-chat | 637 MB | Local |
 
-> 💡 **Lesson learned:** Local LLMs on a Pi 4 with 4GB RAM struggle. Cloud models via Ollama work much better!
+> **Lesson learned:** Local LLMs on a Pi 4 with 4GB RAM struggle. Cloud models via Ollama work much better!
 
 ---
 
-## 🛠️ Development Tools
+## Development Tools
 
 ### VS Code
 
@@ -77,7 +77,7 @@ gh auth login
 
 ---
 
-## 📁 Storage Layout
+## Storage Layout
 
 ```
 SD Card (29GB, 73% used)
@@ -94,7 +94,7 @@ External SSD (1TB, 1% used)
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Install Ollama
 
@@ -123,7 +123,7 @@ Edit the workspace files:
 
 ---
 
-## 🔧 Useful Commands
+## Useful Commands
 
 ```bash
 # Start ollama
@@ -147,7 +147,7 @@ tail -f ~/.openclaw/logs/*.log
 
 ---
 
-## 🤖 Custom AI Agents
+## Custom AI Agents
 
 Experimenting with custom GitHub Copilot agents in VS Code — defining specialised AI assistants through prompt files and shared memory.
 
@@ -163,7 +163,7 @@ GitHub Copilot allows you to create custom agents by defining:
 | Agent | Purpose |
 |-------|---------|
 | **SQL Performance Analyst** | Analyses SQL Server execution plans, identifies performance bottlenecks |
-| **Splunk Query Helper** | Writes Splunk queries and dashboard widgets (because regex is painful) |
+| **Splunk Query Helper** | Writes Splunk queries and dashboard widgets |
 
 ### Shared Memory Architecture
 
@@ -286,7 +286,7 @@ When deploying AI agents in regulated environments, guardrails are critical. Eve
 ```markdown
 # Safety Constraints
 
-⚠️ CRITICAL: You must NEVER execute any query against a production database.
+CRITICAL: You must NEVER execute any query against a production database.
 - No SELECT statements on production
 - No EXPLAIN or SHOW PLAN on production
 - No read-only queries on production
@@ -310,7 +310,7 @@ You may only analyse:
 │      ↓                               ↓                          │
 │   Database → Executes          Blocked by prompt constraint     │
 │      ↓                                                          │
-│   💥 Production incident                                          │
+│   Production incident                                          │
 │                                                                  │
 │   Guardrails act as a prompt-level firewall                     │
 │   before the agent can even attempt the action                   │
@@ -349,7 +349,7 @@ This is essentially a **manual RAG system** — a stepping stone toward:
 
 ---
 
-## 🔮 Future Plans
+## Future Plans
 
 - [ ] Connect second WhatsApp number for dedicated AI assistant
 - [ ] Add monitoring/alerting (Prometheus/Grafana?)
@@ -360,7 +360,7 @@ This is essentially a **manual RAG system** — a stepping stone toward:
 
 ---
 
-## 📚 Resources
+## Resources
 
 - [OpenClaw Docs](https://docs.openclaw.ai)
 - [OpenClaw GitHub](https://github.com/openclaw/openclaw)
@@ -370,5 +370,5 @@ This is essentially a **manual RAG system** — a stepping stone toward:
 ---
 
 <p align="center">
-  <i>Built with 🐧 on a Raspberry Pi</i>
+  <i>Built on a Raspberry Pi</i>
 </p>

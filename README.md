@@ -129,8 +129,8 @@ Edit the workspace files:
 # Start ollama
 ollama serve
 
-# Run an LLM model
-ollama run glm-5
+# Launch openclaw and select an LLM
+ollama launch openclaw
 
 # Check CPU temp
 vcgencmd measure_temp
